@@ -12,4 +12,8 @@ export class Tab1Page {
     public shoppinService: ShoppingItemsService,
   ) {}
 
+  removeItem(item: string): void {
+
+  }
+
 }
