@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ShoppingItemsService } from '../services/shopping-items.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, MenuController } from '@ionic/angular';
 import { AlertsService } from '../services/alerts.service';
 
 @Component({
@@ -14,6 +14,7 @@ export class Tab1Page {
     public shoppinService: ShoppingItemsService,
     public alertController: AlertController,
     private alertsService: AlertsService,
+    private menuController: MenuController, //para controlar que queremos hacer con el menú
   ) {}
 
   removeItem(item: string): void {
@@ -29,6 +30,31 @@ export class Tab1Page {
     const item = this.shoppinService.items.splice(event.detail.from, 1)[0];
     this.shoppinService.items.splice(event.detail.to, 0, item)
     event.detail.complete();
+  }
+
+  async removeAll() {
+      const alert = await this.alertController.create({
+        header: 'Confirmación',
+        message: '¿Estás seguro de que quieres eliminar todos los items?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: (blah) => {
+              // Oculta la ventana del alert
+              alert.dismiss();
+            },
+          },
+          {
+            text: 'Ok',
+            handler: () => {
+              this.shoppinService.removeAllItems();
+              this.menuController.close(); // al hacer la acción de borrar los items se cerrará el menú
+            },
+          },
+        ],
+      });
+  
+      await alert.present();
   }
 
 }
