@@ -20,4 +20,15 @@ export class Tab1Page {
     this.alertsService.presentAlertConfirm(item);
   }
 
+  /** Con ésta función lo que se hace es que cuando movamos una nota, se complete y sepa que ha terminado ese evento,
+   * con el complete()
+   * y con el const y la linea de abajo, modificamos el array para que el orden en el array quede igual que cuando lo visualizamos,
+   * porque si no, estaria visualmente cambiado pero no en el array de forma interna por lo que al eliminar se eliminaria el incorrecto
+   */
+  onReaorderItems(event: any): void {
+    const item = this.shoppinService.items.splice(event.detail.from, 1)[0];
+    this.shoppinService.items.splice(event.detail.to, 0, item)
+    event.detail.complete();
+  }
+
 }
