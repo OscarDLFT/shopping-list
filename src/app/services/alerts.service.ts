@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { ShoppingItemsService } from './shopping-items.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ export class AlertsService {
 
   constructor(
     public alertController: AlertController,
+    public shoppinService: ShoppingItemsService,
   ) { }
 
   /** Para mostrar un alert de ok */
@@ -45,4 +47,29 @@ export class AlertsService {
 
     await alert.present();
   }
+
+  async presentAlertConfirm(item: string) {
+    const alert = await this.alertController.create({
+      header: 'Confirmación',
+      message: '¿Estás seguro de que quieres eliminar el item?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: (blah) => {
+            // Oculta la ventana del alert
+            alert.dismiss();
+          },
+        },
+        {
+          text: 'Ok',
+          handler: () => {
+            this.shoppinService.removeItem(item);
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
 }
